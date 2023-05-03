@@ -1,0 +1,29 @@
+name: Upload to S3
+#-------------------------#
+# トリガーを設定
+#   mainブランチにPRがマージされたら起動(直pushは禁止に設定済み)
+#-------------------------#
+on:
+  push:
+      branches:
+        - main
+
+#-------------------------#
+# デプロイ処理
+#-------------------------#
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      #-- チェックアウト --#
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      #-- デプロイするためのAWS認証情報を取得 --#
+      - name: Deploy to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        #-- 仮想マシン上でコマンドを実行 --#
+        run:
+          aws s3 sync --delete --region ap-northeast-1 ./files/ s3://disk0401.net/
