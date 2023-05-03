@@ -20,10 +20,11 @@ jobs:
         uses: actions/checkout@v3
 
       #-- デプロイするためのAWS認証情報を取得 --#
-      - name: Deploy to S3
+      - name: Deploy to S3. And CloudFront's cache clear.
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         #-- 仮想マシン上でコマンドを実行 --#
-        run:
+        run: |
           aws s3 sync --delete --region ap-northeast-1 ./files/ s3://disk0401.net/
+          aws cloudfront create-invalidation --region ap-northeast-1 --distribution-id EWLQAYQ6MJO2C --paths "/*"
