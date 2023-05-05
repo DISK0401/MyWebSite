@@ -2,5 +2,5 @@
 </script>
 
 <template>
-  <h1>準備中</h1>
+  <h1>ページが見つかりません。</h1>
 </template>
